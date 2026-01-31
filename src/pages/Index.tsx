@@ -194,6 +194,7 @@ const Index = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
+                className="fixed inset-0 z-50 bg-background"
               >
                 <FaceScanner
                   userName={userDetails.name.split(' ')[0]}
