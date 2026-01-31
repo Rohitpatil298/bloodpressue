@@ -9,13 +9,12 @@ export interface UserDetails {
 
 export interface WellnessMetrics {
   bloodPressure: {
-    systolic: { min: number; max: number };
-    diastolic: { min: number; max: number };
+    systolic: number;
+    diastolic: number;
     status: 'normal' | 'elevated' | 'high';
   };
   heartRate: {
-    min: number;
-    max: number;
+    value: number;
     status: 'low' | 'normal' | 'elevated';
   };
   stressLevel: {
@@ -23,16 +22,14 @@ export interface WellnessMetrics {
     status: 'low' | 'moderate' | 'high';
   };
   oxygenSaturation: {
-    min: number;
-    max: number;
+    value: number;
   };
   bmi: {
     value: number;
     status: 'underweight' | 'normal' | 'overweight' | 'obese';
   };
   respiratoryRate: {
-    min: number;
-    max: number;
+    value: number;
     status: 'low' | 'normal' | 'elevated';
   };
 }

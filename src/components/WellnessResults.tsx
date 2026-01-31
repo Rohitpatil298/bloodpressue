@@ -106,7 +106,7 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">Blood Pressure</h3>
-                <p className="text-sm text-muted-foreground">Estimated range</p>
+                <p className="text-sm text-muted-foreground">Systolic / Diastolic</p>
               </div>
             </div>
             {(() => {
@@ -115,14 +115,14 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
             })()}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-bold text-foreground">
-              {metrics.bloodPressure.systolic.min}-{metrics.bloodPressure.systolic.max}
+            <span className="text-4xl font-display font-bold text-foreground">
+              {metrics.bloodPressure.systolic}
             </span>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-xl font-display font-semibold text-foreground">
-              {metrics.bloodPressure.diastolic.min}-{metrics.bloodPressure.diastolic.max}
+            <span className="text-2xl text-muted-foreground">/</span>
+            <span className="text-3xl font-display font-semibold text-foreground">
+              {metrics.bloodPressure.diastolic}
             </span>
-            <span className="text-sm text-muted-foreground">mmHg</span>
+            <span className="text-sm text-muted-foreground ml-1">mmHg</span>
           </div>
           <div className={`mt-2 text-sm font-medium capitalize ${statusColors[metrics.bloodPressure.status]}`}>
             {metrics.bloodPressure.status}
@@ -147,8 +147,8 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
             })()}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-bold text-foreground">
-              {metrics.heartRate.min}-{metrics.heartRate.max}
+            <span className="text-4xl font-display font-bold text-foreground">
+              {metrics.heartRate.value}
             </span>
             <span className="text-sm text-muted-foreground">BPM</span>
           </div>
@@ -175,7 +175,7 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
             })()}
           </div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-display font-bold text-foreground">
+            <span className="text-4xl font-display font-bold text-foreground">
               {metrics.stressLevel.value}
             </span>
             <span className="text-sm text-muted-foreground">/ 100</span>
@@ -217,7 +217,7 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
             })()}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-bold text-foreground">
+            <span className="text-4xl font-display font-bold text-foreground">
               {metrics.bmi.value}
             </span>
             <span className="text-sm text-muted-foreground">kg/m²</span>
@@ -245,8 +245,8 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
             })()}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-bold text-foreground">
-              {metrics.respiratoryRate.min}-{metrics.respiratoryRate.max}
+            <span className="text-4xl font-display font-bold text-foreground">
+              {metrics.respiratoryRate.value}
             </span>
             <span className="text-sm text-muted-foreground">breaths/min</span>
           </div>
@@ -270,8 +270,8 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
             <CheckCircle2 className="w-5 h-5 text-metric-good" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-bold text-foreground">
-              {metrics.oxygenSaturation.min}-{metrics.oxygenSaturation.max}
+            <span className="text-4xl font-display font-bold text-foreground">
+              {metrics.oxygenSaturation.value}
             </span>
             <span className="text-sm text-muted-foreground">%</span>
           </div>
