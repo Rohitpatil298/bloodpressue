@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { User, Calendar, Ruler, Weight, ArrowRight } from 'lucide-react';
-import { UserDetails } from '@/types/wellness';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,8 +12,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+interface BasicUserDetails {
+  name: string;
+  age: number;
+  gender: 'male' | 'female' | 'other';
+  height: number;
+  weight: number;
+}
+
 interface UserDetailsFormProps {
-  onSubmit: (details: UserDetails) => void;
+  onSubmit: (details: BasicUserDetails) => void;
 }
 
 export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
@@ -26,13 +33,53 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
     weight: '',
   });
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
+    }
+
+    const age = parseInt(formData.age);
+    if (!formData.age) {
+      newErrors.age = 'Age is required';
+    } else if (isNaN(age) || age < 18 || age > 120) {
+      newErrors.age = 'Age must be between 18-120';
+    }
+
+    if (!formData.gender) {
+      newErrors.gender = 'Gender is required';
+    }
+
+    const height = parseFloat(formData.height);
+    if (!formData.height) {
+      newErrors.height = 'Height is required';
+    } else if (isNaN(height) || height < 100 || height > 250) {
+      newErrors.height = 'Height must be 100-250 cm';
+    }
+
+    const weight = parseFloat(formData.weight);
+    if (!formData.weight) {
+      newErrors.weight = 'Weight is required';
+    } else if (isNaN(weight) || weight < 30 || weight > 300) {
+      newErrors.weight = 'Weight must be 30-300 kg';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.name && formData.age && formData.gender && formData.height && formData.weight) {
+    if (validateForm()) {
       onSubmit({
-        name: formData.name,
+        name: formData.name.trim(),
         age: parseInt(formData.age),
-        gender: formData.gender,
+        gender: formData.gender as 'male' | 'female' | 'other',
         height: parseFloat(formData.height),
         weight: parseFloat(formData.weight),
       });
@@ -73,8 +120,11 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
               placeholder="Enter your name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="bg-background/50 border-border focus:ring-2 focus:ring-primary/20"
+              className={`bg-background/50 border-border focus:ring-2 focus:ring-primary/20 ${
+                errors.name ? 'border-destructive' : ''
+              }`}
             />
+            {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -87,12 +137,13 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                 id="age"
                 type="number"
                 placeholder="Years"
-                min="1"
+                min="18"
                 max="120"
                 value={formData.age}
                 onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                className="bg-background/50 border-border"
+                className={`bg-background/50 border-border ${errors.age ? 'border-destructive' : ''}`}
               />
+              {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
             </div>
 
             <div className="space-y-2">
@@ -103,7 +154,7 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                   setFormData({ ...formData, gender: value })
                 }
               >
-                <SelectTrigger className="bg-background/50 border-border">
+                <SelectTrigger className={`bg-background/50 border-border ${errors.gender ? 'border-destructive' : ''}`}>
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
@@ -112,6 +163,7 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.gender && <p className="text-xs text-destructive">{errors.gender}</p>}
             </div>
           </div>
 
@@ -125,12 +177,13 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                 id="height"
                 type="number"
                 placeholder="170"
-                min="50"
+                min="100"
                 max="250"
                 value={formData.height}
                 onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                className="bg-background/50 border-border"
+                className={`bg-background/50 border-border ${errors.height ? 'border-destructive' : ''}`}
               />
+              {errors.height && <p className="text-xs text-destructive">{errors.height}</p>}
             </div>
 
             <div className="space-y-2">
@@ -142,12 +195,13 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                 id="weight"
                 type="number"
                 placeholder="70"
-                min="20"
+                min="30"
                 max="300"
                 value={formData.weight}
                 onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                className="bg-background/50 border-border"
+                className={`bg-background/50 border-border ${errors.weight ? 'border-destructive' : ''}`}
               />
+              {errors.weight && <p className="text-xs text-destructive">{errors.weight}</p>}
             </div>
           </div>
 
@@ -160,7 +214,7 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
               disabled={!isValid}
               className="w-full h-12 wellness-gradient text-primary-foreground font-semibold text-base gap-2 disabled:opacity-50"
             >
-              Start Face Scan
+              Continue
               <ArrowRight className="w-5 h-5" />
             </Button>
           </motion.div>

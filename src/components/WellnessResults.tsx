@@ -8,7 +8,8 @@ import {
   RefreshCw,
   AlertTriangle,
   CheckCircle2,
-  TrendingUp
+  TrendingUp,
+  Wind
 } from 'lucide-react';
 import { UserDetails, WellnessMetrics } from '@/types/wellness';
 import { Button } from '@/components/ui/button';
@@ -61,6 +62,7 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
   const hrStatusIcon = statusIcons[metrics.heartRate.status];
   const stressStatusIcon = statusIcons[metrics.stressLevel.status];
   const bmiStatusIcon = statusIcons[metrics.bmi.status];
+  const respStatusIcon = statusIcons[metrics.respiratoryRate.status];
 
   return (
     <motion.div
@@ -82,6 +84,9 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
         </h1>
         <p className="text-muted-foreground mt-2">
           Estimated metrics for {user.name}
+        </p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Posture: <span className="capitalize font-medium text-foreground">{user.posture}</span>
         </p>
       </motion.div>
 
@@ -222,23 +227,56 @@ export function WellnessResults({ user, metrics, onReset }: WellnessResultsProps
           </div>
         </motion.div>
 
+        {/* Respiratory Rate */}
+        <motion.div variants={item} className="glass-card rounded-xl p-5 shadow-lg">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-accent/15 flex items-center justify-center">
+                <Wind className="w-6 h-6 text-accent" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Respiratory Rate</h3>
+                <p className="text-sm text-muted-foreground">Breaths per minute</p>
+              </div>
+            </div>
+            {(() => {
+              const Icon = respStatusIcon;
+              return <Icon className={`w-5 h-5 ${statusColors[metrics.respiratoryRate.status]}`} />;
+            })()}
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-display font-bold text-foreground">
+              {metrics.respiratoryRate.min}-{metrics.respiratoryRate.max}
+            </span>
+            <span className="text-sm text-muted-foreground">breaths/min</span>
+          </div>
+          <div className={`mt-2 text-sm font-medium capitalize ${statusColors[metrics.respiratoryRate.status]}`}>
+            {metrics.respiratoryRate.status}
+          </div>
+        </motion.div>
+
         {/* Oxygen Saturation */}
-        <motion.div variants={item} className="glass-card rounded-xl p-5 shadow-lg md:col-span-2">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-accent/15 flex items-center justify-center">
-              <Activity className="w-6 h-6 text-accent" />
+        <motion.div variants={item} className="glass-card rounded-xl p-5 shadow-lg">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-metric-heart/15 flex items-center justify-center">
+                <Activity className="w-6 h-6 text-metric-heart" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Oxygen Saturation</h3>
+                <p className="text-sm text-muted-foreground">SpO₂ estimate</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Oxygen Saturation (SpO₂)</h3>
-              <p className="text-sm text-muted-foreground">Estimated blood oxygen level</p>
-            </div>
+            <CheckCircle2 className="w-5 h-5 text-metric-good" />
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-display font-bold text-foreground">
               {metrics.oxygenSaturation.min}-{metrics.oxygenSaturation.max}
             </span>
             <span className="text-sm text-muted-foreground">%</span>
-            <span className="ml-2 text-sm font-medium text-metric-good">Normal</span>
+          </div>
+          <div className="mt-2 text-sm font-medium text-metric-good">
+            Normal
           </div>
         </motion.div>
       </motion.div>
